@@ -171,7 +171,7 @@ This project stands on the shoulders of many open-source projects and contributo
 - [JingMatrix](https://github.com/JingMatrix) — author of the LSPosed fork referenced by many users.
 - [cocobo1](https://codeberg.org/cocobo1) — for adapting some features to Xposed which [Revenge Team](https://github.com/revenge-mod) didn't.
 - [Revenge Team](https://github.com/revenge-mod) — provided earlier Xposed module work that informed parts of this project.
-- [kmmiio99o] (https://github.com/kmmiio99o) — Developer of FireCord
+- [kmmiio99o](https://github.com/kmmiio99o) — Developer of ShiggyCord
 
 ---
 
