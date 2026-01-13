@@ -1,6 +1,6 @@
-# ShiggyXposed
+# FireXposed
 
-ShiggyXposed is an Xposed module (Kotlin) that injects the ShiggyCord client modifications into the official Discord Android application. It provides an in-app recovery/dev menu (LogBox) that lets you manage bundle loading, themes, and other developer helpers.
+FireXposed is an Xposed module (Kotlin) that injects the FireCord client modifications into the official Discord Android application. It provides an in-app recovery/dev menu (LogBox) that lets you manage bundle loading, themes, and other developer helpers.
 
 This README explains prerequisites, installation, usage, troubleshooting, and credits. If you want help, open an issue on the repository or join the project's support server (links below).
 
@@ -26,13 +26,13 @@ This README explains prerequisites, installation, usage, troubleshooting, and cr
 
 ## What is this
 
-ShiggyXposed injects a patched ShiggyCord bundle into the official Discord application by using the Xposed framework. It's intended for users who run a rooted Android device and want to apply client-side modifications to Discord.
+FireXposed injects a patched FireCord bundle into the official Discord application by using the Xposed framework. It's intended for users who run a rooted Android device and want to apply client-side modifications to Discord.
 
 ---
 
 ## Features
 
-- Inject a custom ShiggyCord bundle into Discord.
+- Inject a custom FireCord bundle into Discord.
 - Toggle bundle injection on/off (marker-based).
 - Load a custom bundle URL and toggle it on/off.
 - Recovery/LogBox action sheet for reload, safe-mode, refetch/reset, and options.
@@ -44,7 +44,7 @@ ShiggyXposed injects a patched ShiggyCord bundle into the official Discord appli
 
 ## Prerequisites
 
-Before installing and using ShiggyXposed:
+Before installing and using FireXposed:
 
 - A rooted Android device. Supported root solutions you might use:
   - Magisk, KernelSU, KernelSUNext, or Sukisu Ultra.
@@ -57,10 +57,10 @@ Before installing and using ShiggyXposed:
 ## Installation
 
 1. Download the latest APK from the repository Releases:
-   - https://github.com/kmmiio99o/ShiggyXposed/releases
+   - https://github.com/explysm/FireXposed/releases
 2. Install the APK on your device (standard package install).
 3. Open your LSPosed manager (or chosen Xposed manager).
-4. Enable the ShiggyXposed module and ensure the module's scope includes the Discord app.
+4. Enable the FireXposed module and ensure the module's scope includes the Discord app.
 5. Reboot your device (or restart the system process) for changes to take effect.
 
 ---
@@ -124,7 +124,7 @@ Notes:
 ## Troubleshooting & FAQ
 
 1. Module not working or not showing in Discord?
-   - Ensure ShiggyXposed is enabled in LSPosed and Discord is included in the module's scope.
+   - Ensure FireXposed is enabled in LSPosed and Discord is included in the module's scope.
    - Reboot after enabling the module.
    - Confirm you have the compatible LSPosed fork installed (JingMatrix recommended).
 
@@ -171,6 +171,7 @@ This project stands on the shoulders of many open-source projects and contributo
 - [JingMatrix](https://github.com/JingMatrix) — author of the LSPosed fork referenced by many users.
 - [cocobo1](https://codeberg.org/cocobo1) — for adapting some features to Xposed which [Revenge Team](https://github.com/revenge-mod) didn't.
 - [Revenge Team](https://github.com/revenge-mod) — provided earlier Xposed module work that informed parts of this project.
+- [kmmiio99o] (https://github.com/kmmiio99o) — Developer of FireCord
 
 ---
 
@@ -182,10 +183,9 @@ Please refer to the `LICENSE` file in the repository root for the project licens
 
 ## Contact & Links
 
-- Releases: https://github.com/kmmiio99o/ShiggyXposed/releases
-- Repository: https://github.com/kmmiio99o/ShiggyXposed
-- Support server: https://discord.gg/nQykFF9Ud6
+- Releases: https://github.com/explysm/FireXposed/releases
+- Repository: https://github.com/explysm/FireXposed
 
 ---
 
-Thank you for using ShiggyXposed.
+Thank you for using FireXposed.

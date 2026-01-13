@@ -1,10 +1,10 @@
-package ShiggyXposed.xposed.modules
+package FireXposed.xposed.modules
 
 import android.content.Context
 import android.util.AtomicFile
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Log
-import ShiggyXposed.xposed.modules.bridge.BridgeModule
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Log
+import FireXposed.xposed.modules.bridge.BridgeModule
 import java.io.*
 
 /**
@@ -16,18 +16,18 @@ import java.io.*
  *
  * ### Modules cache
  *
- * - `Shiggy.caches.modules.read() : { blacklist: number[], finds: { [filter: string]: { [id: string]: number } | null }, version: number } | null`
+ * - `Fire.caches.modules.read() : { blacklist: number[], finds: { [filter: string]: { [id: string]: number } | null }, version: number } | null`
  * - Reads the modules cache. Returns `null` if the cache file does not exist or is invalid.
  *
- * - `Shiggy.caches.modules.write(blacklist: number[], finds: { [filter: string]: { [id: string]: number } | null }) : void`
+ * - `Fire.caches.modules.write(blacklist: number[], finds: { [filter: string]: { [id: string]: number } | null }) : void`
  * - Writes the modules cache.
  *
  *  ### Assets cache
  *
- * - `Shiggy.caches.assets.read() : { data: { [name: string]: { [type: string]: number } }, version: number } | null`
+ * - `Fire.caches.assets.read() : { data: { [name: string]: { [type: string]: number } }, version: number } | null`
  * - Reads the assets cache. Returns `null` if the cache file does not exist or is invalid.
  *
- * - `Shiggy.caches.assets.write(data: { [name: string]: { [type: string]: number } }) : void`
+ * - `Fire.caches.assets.write(data: { [name: string]: { [type: string]: number } }) : void`
  * - Writes the assets cache.
  *
  *  The caches are versioned and tied to the app version code. When the app is updated,
@@ -35,7 +35,7 @@ import java.io.*
  */
 object CacheModule : Module() {
 
-    private const val CACHE_DIR = "Shiggy"
+    private const val CACHE_DIR = "Fire"
 
     private const val MODULES_CACHE_PREFIX = "modules"
     private const val ASSETS_CACHE_PREFIX = "assets"
@@ -45,18 +45,18 @@ object CacheModule : Module() {
     private lateinit var assetsCache: AssetsCache
 
     override fun onContext(context: Context) = with(context) {
-        val ShiggyCacheDir = File(cacheDir, CACHE_DIR).apply { asDir() }
+        val FireCacheDir = File(cacheDir, CACHE_DIR).apply { asDir() }
         val (_, _, _, versionCode) = getAppInfo()
 
         val modulesCacheFile = File(
-            ShiggyCacheDir, "$MODULES_CACHE_PREFIX.$versionCode"
+            FireCacheDir, "$MODULES_CACHE_PREFIX.$versionCode"
         ).apply { asFile() }
 
         val assetsCacheFile = File(
-            ShiggyCacheDir, "$ASSETS_CACHE_PREFIX.$versionCode"
+            FireCacheDir, "$ASSETS_CACHE_PREFIX.$versionCode"
         ).apply { asFile() }
 
-        BridgeModule.registerMethod("Shiggy.caches.modules.read") {
+        BridgeModule.registerMethod("Fire.caches.modules.read") {
             if (::modulesCache.isInitialized) modulesCache.toMap() else ModulesCache.loadFromFileOrNull(modulesCacheFile)
                 ?.let {
                     modulesCache = it
@@ -64,7 +64,7 @@ object CacheModule : Module() {
                 }
         }
 
-        BridgeModule.registerMethod("Shiggy.caches.modules.write") {
+        BridgeModule.registerMethod("Fire.caches.modules.write") {
             val (blacklist, finds) = it
             @Suppress("UNCHECKED_CAST")
             modulesCache = ModulesCache(
@@ -73,7 +73,7 @@ object CacheModule : Module() {
             Log.i("Modules cache saved: ${modulesCacheFile.absolutePath} (blacklisted: ${blacklist.size}, finds: ${finds.size})")
         }
 
-        BridgeModule.registerMethod("Shiggy.caches.assets.read") {
+        BridgeModule.registerMethod("Fire.caches.assets.read") {
             if (::assetsCache.isInitialized) assetsCache.toMap() else AssetsCache.loadFromFileOrNull(assetsCacheFile)
                 ?.let {
                     assetsCache = it
@@ -81,7 +81,7 @@ object CacheModule : Module() {
                 }
         }
 
-        BridgeModule.registerMethod("Shiggy.caches.assets.write") {
+        BridgeModule.registerMethod("Fire.caches.assets.write") {
             val (data) = it
             @Suppress("UNCHECKED_CAST")
             assetsCache =

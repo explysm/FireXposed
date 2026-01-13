@@ -1,10 +1,10 @@
-package ShiggyXposed.xposed.modules.bridge
+package FireXposed.xposed.modules.bridge
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import ShiggyXposed.xposed.BuildConfig
-import ShiggyXposed.xposed.Constants
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Log
+import FireXposed.xposed.BuildConfig
+import FireXposed.xposed.Constants
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Log
 import java.lang.reflect.Method
 
 /**
@@ -23,7 +23,7 @@ typealias BridgeMethodArgs = ArrayList<Any>
  * To call a method, pass an object with the following structure to a hooked method:
  * ```js
  * {
- *   Shiggy: {
+ *   Fire: {
  *     method: "method.name",
  *     args: [arg1, arg2, ...]
  *   }
@@ -50,7 +50,7 @@ object BridgeModule : Module() {
     private lateinit var readableMapToHashMap: Method
     private lateinit var argumentsMakeNative: Method
 
-    private const val CALL_DATA_KEY = "Shiggy"
+    private const val CALL_DATA_KEY = "Fire"
     private const val METHOD_NAME_KEY = "method"
     private const val METHOD_ARGS_KEY = "args"
 
@@ -105,13 +105,13 @@ object BridgeModule : Module() {
     }
 
     private fun registerDefaultMethods() {
-        methods["Shiggy.info"] = {
+        methods["Fire.info"] = {
             mapOf(
                 "name" to Constants.LOADER_NAME, "version" to BuildConfig.VERSION_CODE
             )
         }
 
-        methods["Shiggy.test"] = {
+        methods["Fire.test"] = {
             mapOf(
                 "string" to "string",
                 "number" to 7256,

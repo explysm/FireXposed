@@ -1,9 +1,9 @@
-package ShiggyXposed.xposed.modules
+package FireXposed.xposed.modules
 
 import android.content.res.Resources
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import ShiggyXposed.xposed.Constants.Companion.TARGET_PACKAGE
-import ShiggyXposed.xposed.Module
+import FireXposed.xposed.Constants.Companion.TARGET_PACKAGE
+import FireXposed.xposed.Module
 
 /**
  * Hooks [Resources.getIdentifier] to fix resource package name mismatch.

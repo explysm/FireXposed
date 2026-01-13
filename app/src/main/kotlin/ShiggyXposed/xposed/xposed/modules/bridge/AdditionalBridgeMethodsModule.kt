@@ -1,4 +1,4 @@
-package ShiggyXposed.xposed.modules.bridge
+package FireXposed.xposed.modules.bridge
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -7,13 +7,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.widget.Toast
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils
 import java.io.File
 
 object AdditionalBridgeMethodsModule : Module() {
     override fun onContext(context: Context) = with(context) {
-        BridgeModule.registerMethod("Shiggy.fs.getConstants") {
+        BridgeModule.registerMethod("Fire.fs.getConstants") {
             mapOf(
                 "data" to dataDir.absolutePath,
                 "files" to filesDir.absolutePath,
@@ -21,7 +21,7 @@ object AdditionalBridgeMethodsModule : Module() {
             )
         }
 
-        BridgeModule.registerMethod("Shiggy.fs.delete") {
+        BridgeModule.registerMethod("Fire.fs.delete") {
             val (path) = it
             File(path as String).run {
                 if (this.isDirectory) this.deleteRecursively()
@@ -29,19 +29,19 @@ object AdditionalBridgeMethodsModule : Module() {
             }
         }
 
-        BridgeModule.registerMethod("Shiggy.fs.exists") {
+        BridgeModule.registerMethod("Fire.fs.exists") {
             val (path) = it
             File(path as String).exists()
         }
 
-        BridgeModule.registerMethod("Shiggy.fs.read") { it ->
+        BridgeModule.registerMethod("Fire.fs.read") { it ->
             val (path) = it
             val file = File(path as String).apply { openFileGuarded() }
 
             file.bufferedReader().use { it.readText() }
         }
 
-        BridgeModule.registerMethod("Shiggy.fs.write") {
+        BridgeModule.registerMethod("Fire.fs.write") {
             val (path, contents) = it
             val file = File(path as String).apply { openFileGuarded() }
 
@@ -50,7 +50,7 @@ object AdditionalBridgeMethodsModule : Module() {
     }
 
     override fun onActivity(activity: Activity) = with(activity) {
-        BridgeModule.registerMethod("Shiggy.alertError") {
+        BridgeModule.registerMethod("Fire.alertError") {
             val (error, version) = it
             val app = getAppInfo()
             val errorString = "$error"
@@ -59,10 +59,10 @@ object AdditionalBridgeMethodsModule : Module() {
             val clip = ClipData.newPlainText("Stack Trace", errorString)
 
             AlertDialog.Builder(this)
-                .setTitle("ShiggyCord Error")
+                .setTitle("FireCord Error")
                 .setMessage(
                     """
-                    ShiggyCord: $version
+                    FireCord: $version
                     ${app.name}: ${app.version} (${app.versionCode})
                     Device: ${Build.MANUFACTURER} ${Build.MODEL}
 
@@ -82,7 +82,7 @@ object AdditionalBridgeMethodsModule : Module() {
             null
         }
 
-        BridgeModule.registerMethod("Shiggy.showRecoveryAlert") {
+        BridgeModule.registerMethod("Fire.showRecoveryAlert") {
             Utils.showRecoveryAlert(this)
         }
     }

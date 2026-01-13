@@ -1,4 +1,4 @@
-package ShiggyXposed.xposed.modules
+package FireXposed.xposed.modules
 
 import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
@@ -23,10 +23,10 @@ import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Companion.reloadApp
-import ShiggyXposed.xposed.Utils.Log
-import ShiggyXposed.xposed.Constants
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Companion.reloadApp
+import FireXposed.xposed.Utils.Log
+import FireXposed.xposed.Constants
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.File
@@ -442,7 +442,7 @@ object LogBoxModule : Module() {
 
             // Title
             val titleView = TextView(context).apply {
-                text = "ShiggyXposed Recovery"
+                text = "FireXposed Recovery"
                 textSize = 22f
                 setTextColor(colors.onSurface)
                 typeface = android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.BOLD)
@@ -1061,7 +1061,7 @@ object LogBoxModule : Module() {
                     val config = JSONObject(configFile.readText())
                     val customLoadUrl = config.optJSONObject("customLoadUrl") ?: JSONObject()
                     customLoadUrl.put("enabled", false)
-                    customLoadUrl.put("url", "http://localhost:4040/shiggycord.js")
+                    customLoadUrl.put("url", "http://localhost:4040/firecord.js")
                     config.put("customLoadUrl", customLoadUrl)
                     configFile.writeText(config.toString())
                 }
@@ -1151,7 +1151,7 @@ object LogBoxModule : Module() {
         container.addView(toggleContainer)
 
         val urlInput = EditText(context).apply {
-            hint = "http://localhost:4040/shiggycord.js"
+            hint = "http://localhost:4040/firecord.js"
             setTextColor(colors.onSurface)
             setHintTextColor(colors.onSurfaceVariant)
             background = createM3Background(context, colors.surfaceVariant, 12f)
@@ -1236,7 +1236,7 @@ object LogBoxModule : Module() {
                     setCustomBundleURL(context, url, true)
                     dialog.dismiss()
                 } else if (!enabled) {
-                    setCustomBundleURL(context, url.ifEmpty { "http://localhost:4040/shiggycord.js" }, false)
+                    setCustomBundleURL(context, url.ifEmpty { "http://localhost:4040/firecord.js" }, false)
                     dialog.dismiss()
                 } else {
                     Toast.makeText(context, "Please enter a valid URL", Toast.LENGTH_SHORT).show()
@@ -1401,7 +1401,7 @@ object LogBoxModule : Module() {
 
             val customLoadUrl = config.optJSONObject("customLoadUrl") ?: JSONObject()
             customLoadUrl.put("enabled", false)
-            customLoadUrl.put("url", "http://localhost:4040/shiggycord.js")
+            customLoadUrl.put("url", "http://localhost:4040/firecord.js")
             config.put("customLoadUrl", customLoadUrl)
 
             configFile.writeText(config.toString())

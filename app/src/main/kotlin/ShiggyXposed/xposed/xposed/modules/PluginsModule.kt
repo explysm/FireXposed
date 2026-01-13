@@ -1,10 +1,10 @@
-package ShiggyXposed.xposed.modules
+package FireXposed.xposed.modules
 
 import android.content.Context
 import android.util.AtomicFile
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Log
-import ShiggyXposed.xposed.modules.bridge.BridgeModule
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Log
+import FireXposed.xposed.modules.bridge.BridgeModule
 import java.io.*
 
 /**
@@ -12,15 +12,15 @@ import java.io.*
  *
  * ## Methods
  *
- * - `Shiggy.plugins.states.read(): { flags: { [pluginId: string]: number } }`
+ * - `Fire.plugins.states.read(): { flags: { [pluginId: string]: number } }`
  * - Reads the current plugin states from the file and returns them as a map.
  *
- * - `Shiggy.plugins.states.write(flags: { [pluginId: string]: number }): void`
+ * - `Fire.plugins.states.write(flags: { [pluginId: string]: number }): void`
  * - Writes the provided plugin states to the file.
  */
 class PluginsModule : Module() {
     private companion object {
-        const val DATA_DIR = "Shiggy/plugins"
+        const val DATA_DIR = "Fire/plugins"
         const val STATES_FILE = "states"
     }
 
@@ -33,7 +33,7 @@ class PluginsModule : Module() {
             dataDir, STATES_FILE
         ).apply { asFile() }
 
-        BridgeModule.registerMethod("Shiggy.plugins.states.read") {
+        BridgeModule.registerMethod("Fire.plugins.states.read") {
             if (::states.isInitialized) states.toMap() else
                 PluginStates.loadFromFileOrNull(statesFile)?.let {
                     states = it
@@ -41,7 +41,7 @@ class PluginsModule : Module() {
                 }
         }
 
-        BridgeModule.registerMethod("Shiggy.plugins.states.write") {
+        BridgeModule.registerMethod("Fire.plugins.states.write") {
             val (flags) = it
             @Suppress("UNCHECKED_CAST")
             states = PluginStates(

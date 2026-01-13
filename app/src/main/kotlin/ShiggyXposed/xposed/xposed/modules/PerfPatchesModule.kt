@@ -1,11 +1,11 @@
-package ShiggyXposed.xposed.modules
+package FireXposed.xposed.modules
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import kotlinx.serialization.json.JsonObjectBuilder
 import kotlinx.serialization.json.put
-import ShiggyXposed.xposed.Constants
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Log
+import FireXposed.xposed.Constants
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Log
 import java.io.File
 
 /**
@@ -34,14 +34,14 @@ object PerfPatchesModule : Module() {
             val js = """
                 (function(){
                   try {
-                    if (!globalThis.__SHIGGY_PERF_PATCHES__) {
-                      globalThis.__SHIGGY_PERF_PATCHES__ = { installedAt: Date.now(), enabled: true };
+                    if (!globalThis.__FIRE_PERF_PATCHES__) {
+                      globalThis.__FIRE_PERF_PATCHES__ = { installedAt: Date.now(), enabled: true };
                     }
 
                     function safe(fn) {
                       return function() {
                         try { return fn.apply(this, arguments); }
-                        catch (e) { try { console && console.warn && console.warn('shiggy patch error', e); } catch(_){} }
+                        catch (e) { try { console && console.warn && console.warn('fire patch error', e); } catch(_){} }
                       };
                     }
 
@@ -130,12 +130,12 @@ object PerfPatchesModule : Module() {
                                 }
                               } else sig = 'noargs';
 
-                              if (this.__shiggy_sig === sig && typeof this.__shiggy_cache !== 'undefined') {
-                                return this.__shiggy_cache;
+                              if (this.__fire_sig === sig && typeof this.__fire_cache !== 'undefined') {
+                                return this.__fire_cache;
                               }
                               var res = orig.apply(this, arguments);
-                              this.__shiggy_sig = sig;
-                              this.__shiggy_cache = res;
+                              this.__fire_sig = sig;
+                              this.__fire_cache = res;
                               return res;
                             } catch (e) { return orig.apply(this, arguments); }
                           };
@@ -180,7 +180,7 @@ object PerfPatchesModule : Module() {
                         var pending = new Map();
                         // Lightweight stats for dedupe wrapper to help telemetry/debugging in-case we need to tune delays.
                         try {
-                          globalThis.__SHIGGY_PERF_DEDUPE_STATS__ = globalThis.__SHIGGY_PERF_DEDUPE_STATS__ || {
+                          globalThis.__FIRE_PERF_DEDUPE_STATS__ = globalThis.__FIRE_PERF_DEDUPE_STATS__ || {
                             methods: {},
                             totalRequests: 0,
                             totalHits: 0,
@@ -192,7 +192,7 @@ object PerfPatchesModule : Module() {
 
                         function _incStats(name, key) {
                           try {
-                            var s = globalThis.__SHIGGY_PERF_DEDUPE_STATS__;
+                            var s = globalThis.__FIRE_PERF_DEDUPE_STATS__;
                             if (!s) return;
                             s.lastUpdated = Date.now();
                             var m = s.methods[name] || (s.methods[name] = { requests: 0, hits: 0, misses: 0, pending: 0 });
@@ -279,11 +279,11 @@ object PerfPatchesModule : Module() {
 
                     // Expose lightweight API
                     try {
-                      if (!globalThis.__SHIGGY_PERF_API__) {
-                        globalThis.__SHIGGY_PERF_API__ = {
+                      if (!globalThis.__FIRE_PERF_API__) {
+                        globalThis.__FIRE_PERF_API__ = {
                           installedAt: Date.now(),
                           enabled: true,
-                          uninstall: function() { try { globalThis.__SHIGGY_PERF_API__.enabled = false; } catch(e) {} }
+                          uninstall: function() { try { globalThis.__FIRE_PERF_API__.enabled = false; } catch(e) {} }
                         };
                       }
                     } catch (e) {}

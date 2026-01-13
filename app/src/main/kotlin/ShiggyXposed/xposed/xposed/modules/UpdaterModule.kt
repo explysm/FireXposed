@@ -1,4 +1,4 @@
-package ShiggyXposed.xposed.modules
+package FireXposed.xposed.modules
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -7,12 +7,12 @@ import android.util.AtomicFile
 import android.widget.Toast
 import androidx.core.util.writeBytes
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import ShiggyXposed.xposed.Constants
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils
-import ShiggyXposed.xposed.Utils.Companion.JSON
-import ShiggyXposed.xposed.Utils.Companion.reloadApp
-import ShiggyXposed.xposed.Utils.Log
+import FireXposed.xposed.Constants
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils
+import FireXposed.xposed.Utils.Companion.JSON
+import FireXposed.xposed.Utils.Companion.reloadApp
+import FireXposed.xposed.Utils.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -57,7 +57,7 @@ object UpdaterModule : Module() {
     private const val CONFIG_FILE = "loader.json"
 
     private const val DEFAULT_BUNDLE_URL =
-        "https://github.com/kmmiio99o/ShiggyCord/releases/latest/download/shiggycord.js"
+        "https://github.com/explysm/FireCord/releases/latest/download/firecord.js"
 
     override fun onLoad(packageParam: XC_LoadPackage.LoadPackageParam) = with(packageParam) {
         // store app data dir for later checks (LogBox settings live under files/logbox)
@@ -132,7 +132,7 @@ object UpdaterModule : Module() {
                         // This is a retry, so we show a dialog
                         if (activity != null) {
                             withContext(Dispatchers.Main) {
-                                AlertDialog.Builder(activity).setTitle("ShiggyCord Update Successful")
+                                AlertDialog.Builder(activity).setTitle("FireCord Update Successful")
                                     .setMessage("A reload is required for changes to take effect.")
                                     .setPositiveButton("Reload") { dialog, _ ->
                                         reloadApp()

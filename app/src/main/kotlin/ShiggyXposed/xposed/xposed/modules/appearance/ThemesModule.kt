@@ -1,12 +1,12 @@
-package ShiggyXposed.xposed.modules.appearance
+package FireXposed.xposed.modules.appearance
 
 import android.content.Context
 import android.content.res.Resources
 import androidx.core.graphics.toColorInt
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import ShiggyXposed.xposed.Constants
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Companion.JSON
+import FireXposed.xposed.Constants
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Companion.JSON
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObjectBuilder

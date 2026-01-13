@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "ShiggyXposed.xposed"
+    namespace = "FireXposed.xposed"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "ShiggyXposed.xposed"
+        applicationId = "FireXposed.xposed"
         minSdk = 24
         targetSdk = 36
         versionCode = 1250

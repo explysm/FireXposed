@@ -1,4 +1,4 @@
-package ShiggyXposed.xposed.modules.appearance
+package FireXposed.xposed.modules.appearance
 
 import android.content.res.AssetManager
 import android.graphics.Typeface
@@ -9,10 +9,10 @@ import android.os.Build
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import ShiggyXposed.xposed.Constants
-import ShiggyXposed.xposed.Module
-import ShiggyXposed.xposed.Utils.Companion.JSON
-import ShiggyXposed.xposed.Utils.Log
+import FireXposed.xposed.Constants
+import FireXposed.xposed.Module
+import FireXposed.xposed.Utils.Companion.JSON
+import FireXposed.xposed.Utils.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
