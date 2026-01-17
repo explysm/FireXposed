@@ -48,6 +48,11 @@ class Utils {
     }
 
     object Log {
+        var DEBUG = BuildConfig.DEBUG
+
+        fun d(msg: String) {
+            if (DEBUG) android.util.Log.d(Constants.LOG_TAG, msg)
+        }
         fun e(msg: String) = android.util.Log.e(Constants.LOG_TAG, msg)
         fun e(msg: String, throwable: Throwable) = android.util.Log.e(Constants.LOG_TAG, msg, throwable)
         fun i(msg: String) = android.util.Log.i(Constants.LOG_TAG, msg)

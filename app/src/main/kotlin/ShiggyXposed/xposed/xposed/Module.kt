@@ -179,5 +179,13 @@ abstract class Module {
             set(value) {
                 param.throwable = value
             }
+
+        fun setResult(value: Any?) {
+            param.result = value
+        }
+
+        fun replace(value: Any?) {
+            param.result = value
+        }
     }
 }

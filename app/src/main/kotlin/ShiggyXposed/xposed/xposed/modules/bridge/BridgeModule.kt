@@ -107,7 +107,9 @@ object BridgeModule : Module() {
     private fun registerDefaultMethods() {
         methods["Fire.info"] = {
             mapOf(
-                "name" to Constants.LOADER_NAME, "version" to BuildConfig.VERSION_CODE
+                "name" to Constants.LOADER_NAME,
+                "version" to BuildConfig.VERSION_NAME,
+                "versionCode" to BuildConfig.VERSION_CODE
             )
         }
 

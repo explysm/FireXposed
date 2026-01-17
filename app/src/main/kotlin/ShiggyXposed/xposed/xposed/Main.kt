@@ -53,7 +53,7 @@ class Main : Module(), IXposedHookLoadPackage, IXposedHookZygoteInit {
     )
 
     init {
-        modules += PayloadGlobalModule(modules)
+        HookScriptLoaderModule.setModules(modules)
     }
 
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {

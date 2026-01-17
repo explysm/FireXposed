@@ -8,11 +8,15 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 import FireXposed.xposed.Constants
 import FireXposed.xposed.HookStateHolder
 import FireXposed.xposed.Module
+import FireXposed.xposed.BuildConfig
+import FireXposed.xposed.Utils.Companion.JSON
 import FireXposed.xposed.Utils.Log
 import FireXposed.xposed.modules.HookScriptLoaderModule.PRELOADS_DIR
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import java.io.File
 import java.lang.reflect.Method
 
@@ -30,8 +34,25 @@ object HookScriptLoaderModule : Module() {
 
     private lateinit var modulePath: String
     private lateinit var resources: XModuleResources
+    
+    private var modules: List<Module>? = null
 
     const val PRELOADS_DIR = "preloads"
+    const val GLOBAL_NAME = "__PYON_LOADER__"
+
+    fun setModules(modules: List<Module>) {
+        this.modules = modules
+    }
+
+    private fun getPayloadString(): String = JSON.encodeToString(
+        buildJsonObject {
+            put("loaderName", Constants.LOADER_NAME)
+            put("loaderVersion", BuildConfig.VERSION_NAME)
+            modules?.forEach { 
+                @Suppress("DEPRECATION")
+                it.buildPayload(this) 
+            }
+        })
 
     override fun onInit(startupParam: IXposedHookZygoteInit.StartupParam) {
         this@HookScriptLoaderModule.modulePath = startupParam.modulePath
@@ -82,13 +103,25 @@ object HookScriptLoaderModule : Module() {
         Log.i("Running custom scripts...")
 
         runBlocking {
-            val ready = async { HookStateHolder.readyDeferred.join() }
-            val download = async { UpdaterModule.downloadScript().join() }
-
-            awaitAll(ready, download)
+            val downloadJob = UpdaterModule.downloadScript()
+            if (!mainScript.exists()) {
+                Log.i("Main script not found, waiting for download...")
+                downloadJob.join()
+            }
+            HookStateHolder.readyDeferred.join()
         }
 
         val loadSynchronously = args[2]
+        
+        // Inject global payload
+        try {
+            val payloadFile = File(preloadsDir, "rv_globals_$GLOBAL_NAME.js")
+            payloadFile.writeText("this[${JSON.encodeToString(GLOBAL_NAME)}]=${getPayloadString()}")
+            Log.i("Injected global payload to ${payloadFile.absolutePath}")
+        } catch (e: Throwable) {
+            Log.e("Failed to inject global payload", e)
+        }
+
         val runScriptFile = { file: File ->
             Log.i("Loading script: ${file.absolutePath}")
 
@@ -109,6 +142,9 @@ object HookScriptLoaderModule : Module() {
             } else {
                 // Normal behaviour: run preloads then cached main script or fallback to bundled asset
                 preloadsDir.walk().filter { it.isFile }.forEach(runScriptFile)
+                
+                // Cleanup temporary globals
+                preloadsDir.listFiles { _, name -> name.startsWith("rv_globals_") }?.forEach { it.delete() }
 
                 if (mainScript.exists()) {
                     runScriptFile(mainScript)

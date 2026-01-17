@@ -45,6 +45,15 @@ object UpdaterModule : Module() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var lastActivity: WeakReference<Activity>? = null
 
+    private val client by lazy {
+        HttpClient(CIO) {
+            expectSuccess = false
+            install(UserAgent) { agent = Constants.USER_AGENT }
+            install(HttpRedirect) {}
+            install(HttpTimeout)
+        }
+    }
+
     private lateinit var cacheDir: File
     private lateinit var bundle: File
     private lateinit var etag: File
@@ -96,30 +105,25 @@ object UpdaterModule : Module() {
                 // If anything goes wrong reading the setting, proceed with normal behaviour.
             }
 
-            HttpClient(CIO) {
-                expectSuccess = false
-                install(UserAgent) { agent = Constants.USER_AGENT }
-                install(HttpRedirect) {}
-            }.use { client ->
-                val url = config.customLoadUrl.takeIf { it.enabled }?.url ?: DEFAULT_BUNDLE_URL
-                Log.i("Fetching JS bundle from: $url")
+            val url = config.customLoadUrl.takeIf { it.enabled }?.url ?: DEFAULT_BUNDLE_URL
+            Log.i("Fetching JS bundle from: $url")
 
-                val response: HttpResponse = client.get(url) {
-                    headers {
-                        if (etag.exists() && bundle.exists()) {
-                            append(HttpHeaders.IfNoneMatch, etag.readText())
-                        }
-                    }
-
-                    // Retries don't need timeout
-                    if (activity == null) {
-                        timeout {
-                            requestTimeoutMillis = if (!bundle.exists()) TIMEOUT else TIMEOUT_CACHED
-                        }
+            val response: HttpResponse = client.get(url) {
+                headers {
+                    if (etag.exists() && bundle.exists()) {
+                        append(HttpHeaders.IfNoneMatch, etag.readText())
                     }
                 }
 
-                when (response.status) {
+                // Retries don't need timeout
+                if (activity == null) {
+                    timeout {
+                        requestTimeoutMillis = if (!bundle.exists()) TIMEOUT else TIMEOUT_CACHED
+                    }
+                }
+            }
+
+            when (response.status) {
                     HttpStatusCode.OK -> {
                         val bytes: ByteArray = response.body()
                         AtomicFile(bundle).writeBytes(bytes)
@@ -150,7 +154,6 @@ object UpdaterModule : Module() {
                         throw ResponseException(response, "Received status: ${response.status}")
                     }
                 }
-            }
         } catch (e: Throwable) {
             Log.e("Failed to download script", e)
             showErrorDialog(e)
